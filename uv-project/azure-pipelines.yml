@@ -1,0 +1,21 @@
+# azure-pipelines.yml
+trigger:
+  - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+  - script: |
+      curl -LsSf https://astral.sh/uv/install.sh | sh
+      echo '##vso[task.prependpath]~/.local/bin'
+    displayName: 'Install uv'
+
+  - script: |
+      uv python install
+      uv sync --frozen
+    displayName: 'Sync dependencies with uv'
+
+  - script: |
+      uv run pytest -v
+    displayName: 'Run tests'

@@ -1,0 +1,25 @@
+# azure-pipelines.yml
+trigger:
+  - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.12'
+    displayName: 'Set up Python'
+
+  - script: |
+      pipx install poetry
+    displayName: 'Install/Update Poetry'
+
+  - script: |
+      poetry install --no-interaction --no-root
+    displayName: 'Install dependencies with Poetry'
+
+  - script: |
+      poetry run pytest -v
+    displayName: 'Run tests'
+
